@@ -1,6 +1,6 @@
 import 'date-fns';
 import React, { PureComponent } from 'react';
-import { TextField, Grid, Button, Box} from '@material-ui/core';
+import { TextField, Grid, Button} from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -10,7 +10,9 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 class TodoEditFormView extends PureComponent {
   render(){
 
-    const selectedDate = new Date();
+    const { todo, onSetTodoProps, onAddTodo } = this.props
+
+    // const selectedDate = new Date();
 
     return(
       <form noValidate>
@@ -20,7 +22,10 @@ class TodoEditFormView extends PureComponent {
               margin="normal"
               id="outlined-basic" 
               label="Title" 
-              variant="standard" />
+              variant="standard"
+              value={todo?.title || ''} 
+              onChange={(event) => onSetTodoProps('title', event.target.value)}
+            />
           </Grid>
           <Grid item xs={3}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -29,8 +34,8 @@ class TodoEditFormView extends PureComponent {
                 id="date-picker-dialog"
                 label="Date"
                 format="yyyy-MM-dd"
-                value={selectedDate}
-                // onChange={handleDateChange}
+                value={ todo?.date || null }
+                onChange={(date) => onSetTodoProps('date', date.valueOf())}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -39,7 +44,7 @@ class TodoEditFormView extends PureComponent {
           </Grid>
         </Grid>
         <Grid item >
-         <Button variant='contained' color='primary' startIcon={<SaveIcon />}>Add</Button>&nbsp;&nbsp;
+         <Button variant='contained' color='primary' startIcon={<SaveIcon />} onClick={onAddTodo}>Add</Button>&nbsp;&nbsp;
          <Button variant='contained' color='default' startIcon={<UpdateIcon />}>Update</Button>&nbsp;&nbsp;
          <Button variant='contained' color='secondary' startIcon={<DeleteIcon />}>Delete</Button>&nbsp;&nbsp;
           
